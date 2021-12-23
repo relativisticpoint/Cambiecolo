@@ -1,7 +1,13 @@
 import multiprocessing
 import random
+#the game process is supposed to : 1- imlement the game session 2-keep trck of the current offers AND the bell
+#this means that we should use the "while (Bell_Ringing == False):" in the game process contrairement à ce qu on a fait dans le pseudo code ;)
 global switcher 
 switcher = {0:'airplane',1:'car',2:'train',3:'bike',4:'shoes'}
+global bell
+bell = False
+
+
 class Player:
     def __init__(self,id,hand) :
         self.id = id
@@ -19,7 +25,7 @@ def init_game(num_players):
     p=[]
     for i in range(num_players):
         # p[i] = Process(target=Player, args=(i, rand_hand))
-        break
+        break #juste pour tester si tt fonctionne bien à enlever 
 
 
 
