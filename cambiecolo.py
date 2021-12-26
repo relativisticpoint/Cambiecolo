@@ -1,6 +1,6 @@
 import multiprocessing
 import random
-#the game process is supposed to : 1- imlement the game session 2-keep trck of the current offers AND the bell
+#the game process is supposed to : 1- imlement the game session 2-keep track of the current offers AND the bell
 #this means that we should use the "while (Bell_Ringing == False):" in the game process contrairement à ce qu on a fait dans le pseudo code ;)
 global switcher 
 switcher = {0:'airplane',1:'car',2:'train',3:'bike',4:'shoes'}
@@ -13,7 +13,7 @@ class Player:
         self.id = id
         self.hand = hand 
     def __str__(self) -> str:
-        return f"the hand of the player {self.id} is {self.hand} "
+        return f"the hand of the player {self.id} is {self.hand}"
 def rand_hand():
     hand = []
     for i in range(5):
@@ -33,6 +33,8 @@ def init_game(num_players):
 
 def Game(num_players=2):
     init_game(num_players)
+    while bell==False:
+        break
 
 
 
