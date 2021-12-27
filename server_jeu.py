@@ -37,6 +37,14 @@ def rand_hand(): #return un deck aleatoire de 5 cartes
     # print (hand)
     return hand
 #*******************************************************
+def broadcast(message):
+    message = bytes(message,'utf-8')
+    for i in clients : 
+        i.sock.sendall(message)
+#*******************************************************
+#a remplir par la fonction connect()
+
+#*******************************************************
 def player(sock,hand,port):
     lock = threading.Lock()
     sock.bind(('',port)) #initialise la socket sur le port 65432
@@ -63,5 +71,4 @@ def game(num_players):
 
 if __name__=="__main__":
     game(2)
-    #check the Bell 
 
