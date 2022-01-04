@@ -18,6 +18,7 @@ class Client(object):
             # self.sock.close()
         print(data)
 
+#now we have to input smt in the client terminal and send it to the server that would analyze it 
 
 if __name__ == "__main__":
     host = '127.0.0.1'
