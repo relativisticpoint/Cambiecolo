@@ -10,8 +10,8 @@ import socket
 import client
 import random
 #*******************************************
-num_players = 0
-switcher = {0:'airplane',1:'car',2:'train',3:'bike',4:'shoes'} #dictionnaire des cartes disponibles (associe a chaque carte un numero)
+num_players = 2
+cartes = {0:'airplane',1:'car',2:'train',3:'bike',4:'shoes'} #dictionnaire des cartes disponibles (associe a chaque carte un numero)
 clients = []
 player_processes = []
 Bell = False
@@ -33,7 +33,7 @@ def rand_hand(): #return un deck aleatoire de 5 cartes
     hand = []
     for i in range(5):
         aleatoire=random.randint(0,4)
-        hand.append(switcher[aleatoire])
+        hand.append(cartes[aleatoire])
     # print (hand)
     return hand
 #*******************************************************
@@ -46,8 +46,8 @@ def broadcast(message):
 
 #*******************************************************
 def player(sock,hand,port):
-    lock = threading.Lock()
-    sock.bind(('',port)) #initialise la socket sur le port 65432
+
+    sock.bind(('',port)) #initialise la socket sur le port 65432 pour le premier joueur (on rajoute 1 au num de port à chaque nouveau joueur)
     sock.listen()
 
     while True:
@@ -57,18 +57,27 @@ def player(sock,hand,port):
             clients.append(Player(addr,sock,len(clients),hand))#ici on cree l objet Player et on le rajoute a la liste des joueurs 
             print('*'*10,"le numéro",i,clients[i]) #le pb c est que ca nous print le client que sur ce port 
             i+=1
+            if i==num_players:
+                print('je passe par la boucle')
+                broadcast('un nouveau joueur s est rajouté les reufs')
+    
 #*******************************************************
 def game(num_players):
     #create player processes
     port = 65432
     for i in range(num_players):
-        
-        sock = socket.socket(socket.AF_INET, socket.SOCK_STREAM) #on initialise le socket en fonction de son type dans ce cas tcp ipv4
-        random_hand = rand_hand() #on cree une 'main' aleatoire 
-        player_process = Process(target=player,args=(sock,random_hand,port,))#??should the player processes listen on the same port ? NON ref : port already used 
-        port+=1
+        sock = socket.socket(socket.AF_INET, socket.SOCK_STREAM) 
+        #on initialise le socket en fonction de son type dans ce cas tcp ipv4
+        random_hand = rand_hand() 
+        #on cree une 'main' aleatoire 
+        player_process = Process(target=player,args=(sock,random_hand,port,))
+        #??should the player processes listen on the same port ? NON ref : port already used 
+        player_processes.append(player_process)
+        port+=1 
+        #on rajoute 1 au num de port pour attribuer à chaque joueur un numéro de port
         player_process.start()
 
 if __name__=="__main__":
-    game(2)
+    game(num_players) #initialiser num_players en haut (variable globale) en fonction du nombre de players
+    print(player_processes)
 
