@@ -13,7 +13,16 @@ class Client(object):
         # s = 'connection successfull'
         # s=bytes(s,'utf-8')
         # self.sock.sendall(s)
-        print("connection successfull")
+        print("connexion established")
+        while True:
+            # i=input("entrez le message !")
+            # i=bytes(i, 'utf-8')
+            # sock.sendall(i)
+            data = sock.recv(1024)
+            print(data)
+
+
+
         # while True:
         #     data = self.sock.recv(1024)
         #     # self.sock.close()
