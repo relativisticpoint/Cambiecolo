@@ -59,7 +59,6 @@ def initialize_game():
             joueurs.append(Player(name,i,rand_hand()))
             i+=1
             print("hello")
-        
     print('on a fini le while')
     for i in range(num_players):
         print(joueurs[i])
@@ -69,6 +68,8 @@ def initialize_game():
     
 def player(num):
     #initialize_game()
+    initialize_key(num_players)
+    initialize_mq(num_players)
     while not Bell :
         requete = ''
         requete, t=mqs[num].receive()
