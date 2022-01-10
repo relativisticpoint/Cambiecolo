@@ -6,7 +6,6 @@ import sysv_ipc
 from multiprocessing import Process, Queue
 import threading
 import socket
-import client
 import random
 
 #*************************************************Joueurn************************************************
