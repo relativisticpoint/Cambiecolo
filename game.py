@@ -6,7 +6,6 @@ import sysv_ipc
 from multiprocessing import Process, Queue
 import threading
 import socket
-import client
 import random
 
 #*************************************************GAME************************************************
@@ -69,7 +68,7 @@ def initialize_game():
   
     
 def player(num):
-    initialize_game()
+    #initialize_game()
     while not Bell :
         requete = ''
         requete, t=mqs[num].receive()
@@ -80,16 +79,19 @@ def player(num):
         
         
 def clean():
-    for i in range(num_players):
-        q = sysv_ipc.MessageQueue(666+i)
-        q.remove()
-    print("on a vidé les queues")   
+	try:
+		for i in range(num_players):
+			q = sysv_ipc.MessageQueue(666+i)
+			q.remove()
+		print("on a vidé les queues") 
+	except:
+		print("AHA")  
       
 		
                 
 if __name__=="__main__":
     clean()
-    
+    initialize_game()
     for i in range(num_players):
         random_hand = rand_hand()
 
