@@ -3,10 +3,11 @@ import os
 import sys
 import time
 import sysv_ipc
-from multiprocessing import Process, Queue
+from multiprocessing import Process, Queue, shared_memory
 import threading
 import socket
 import random
+
 
 #*************************************************GAME************************************************
 num_players = 2 #num des joueurs
@@ -14,6 +15,7 @@ cartes = {0:'airplane',1:'car',2:'train',3:'bike',4:'shoes'} #dictionnaire des c
 joueurs = []
 mqs = []
 list_player_processes = []
+offers = shared_memory.ShareableList(["","","","",""])
 Bell = False #
 
 keys = [] #pour pouvoir utiliser la message queue une key par joueur 
@@ -66,16 +68,26 @@ def initialize_game():
   
     
 def player(num):
-    #initialize_game()
-    initialize_key(num_players)
-    initialize_mq(num_players)
-    while not Bell :
-        requete = ''
-        requete, t=mqs[num].receive()
-        while not requete == '':
-            requete=requete.decode()
-            print("Player ",num," :",requete)
-            requete=''
+	#initialize_game()
+	global offers
+	initialize_key(num_players)
+	initialize_mq(num_players)
+	while not Bell :
+		requete = ''
+		requete, t=mqs[num].receive()
+		requete=requete.decode()
+		if not requete == '' and not requete == "askOffer":
+			#requete=requete.decode()
+			print("Player ",num," :",requete)
+			offers[num] = requete
+			requete=''
+		if requete == "askOffer":
+			print(offers)
+			print(requete)
+			message = str(offers).encode()
+			mqs[num].send(message)
+			requete=""
+
         
         
 def clean():

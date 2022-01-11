@@ -40,7 +40,11 @@ if __name__=="__main__":
             message = str(offre).encode()
             mq.send(message)
         if request == "afficher_offres":
-            print("Voici les offres")
+            ask = "askOffer"
+            message = str(ask).encode()
+            mq.send(message)
+            
+            print("Voici les offres ")
             #réception du tableau des offres par mq
             m, _ = mq.receive()
             m = m.decode()
@@ -48,3 +52,12 @@ if __name__=="__main__":
         if request == "cloche":
             print("cloche")
             #envoie de l'action sonner cloche à game par mq
+            
+        
+        
+        
+        
+        
+        
+        
+        
