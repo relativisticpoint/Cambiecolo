@@ -90,44 +90,44 @@ def isOfferValid(offre, num):
     isValid = False
     print("offre:",offre," du joueur: ",num)
     if haveCard(offre, num):
-    	print("haveCard")
-    	if haveGoodNumber(offre, num):
-    		print("haveGoodNumber")
-    		isValid = True
+        print("haveCard")
+    if haveGoodNumber(offre, num):
+        print("haveGoodNumber")
+    isValid = True
     		
     return isValid
 
 def player(num):
-	#initialize_game()
-	global offers
-	initialize_key(num_players)
-	initialize_mq(num_players)
-	while not Bell :
-		requete = ''
-		requete, t=mqs[num].receive()
-		requete=requete.decode()
-		if not requete == '' and not requete == "askOffer" and not requete == "badInput":
-			if isOfferValid(requete,num):
-			    print("Player ",num," :",requete)
-			    offers[num] = str(requete)
-			    ack = "ack:Offre valide"
-			    message = str(ack).encode()
-			    mqs[num].send(message)
-			else:
-			    errorMessage = "error:Offre non valide"
-			    message = str(errorMessage).encode()
-			    mqs[num].send(message)
-			requete=''
-		if requete == "askOffer":
-			print(offers)
-			print(requete)
-			message = str(offers).encode()
-			mqs[num].send(message)
-			requete=""
-		if requete == "badInput":
-			errorMessage = "error:bad input"
-			message = str(errorMessage).encode()
-			mqs[num].send(message)
+    #initialize_game()
+    global offers
+    initialize_key(num_players)
+    initialize_mq(num_players)
+    while not Bell :
+        requete = ''
+        requete, t=mqs[num].receive()
+        requete=requete.decode()
+        if not requete == '' and not requete == "askOffer" and not requete == "badInput":
+            if isOfferValid(requete,num):
+                print("Player ",num," :",requete)
+                offers[num] = str(requete)
+                ack = "ack:Offre valide"
+                message = str(ack).encode()
+                mqs[num].send(message)
+        else:
+            errorMessage = "error:Offre non valide"
+            message = str(errorMessage).encode()
+            mqs[num].send(message)
+            requete=''
+        if requete == "askOffer":
+            print(offers)
+            print(requete)
+            message = str(offers).encode()
+            mqs[num].send(message)
+            requete=""
+        if requete == "badInput":
+            errorMessage = "error:bad input"
+            message = str(errorMessage).encode()
+            mqs[num].send(message)
 			
 
         
