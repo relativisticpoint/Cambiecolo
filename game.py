@@ -11,11 +11,11 @@ import random
 
 #*************************************************GAME************************************************
 num_players = 2 #num des joueurs
-cartes = {0:'airplane',1:'car',2:'train',3:'bike',4:'shoes'} #dictionnaire des cartes disponibles (associe a chaque carte un numero)
+cartes = {0:'plane',1:'car',2:'train',3:'bike',4:'shoes'} #dictionnaire des cartes disponibles (associe a chaque carte un numero)
 joueurs = []
 mqs = []
 list_player_processes = []
-offers = shared_memory.ShareableList(["","","","",""])
+offers = shared_memory.ShareableList([""*32,""*32,""*32,""*32,""*32])
 Bell = False #
 
 keys = [] #pour pouvoir utiliser la message queue une key par joueur 
@@ -64,9 +64,39 @@ def initialize_game():
     for i in range(num_players):
         print(joueurs[i])
     
-    
-  
-    
+
+def haveCard(offre, num):
+    isValid = False
+    cardName = offre[1:]
+    for card in joueurs[num].hand:
+        if cardName == card:
+            isValid = True
+    return isValid
+
+def haveGoodNumber(offre, num):
+    isValid = False
+    cardNumber = int(offre[:1])
+    cardName = offre[1:]
+    counter = 0
+    for card in joueurs[num].hand:
+        if cardName == card:
+            counter += 1
+    print("counter: ",counter,"et cardNumber: ",cardNumber)
+    if cardNumber <= counter:
+        isValid = True
+    return isValid
+        
+def isOfferValid(offre, num):
+    isValid = False
+    print("offre:",offre," du joueur: ",num)
+    if haveCard(offre, num):
+    	print("haveCard")
+    	if haveGoodNumber(offre, num):
+    		print("haveGoodNumber")
+    		isValid = True
+    		
+    return isValid
+
 def player(num):
 	#initialize_game()
 	global offers
@@ -76,10 +106,17 @@ def player(num):
 		requete = ''
 		requete, t=mqs[num].receive()
 		requete=requete.decode()
-		if not requete == '' and not requete == "askOffer":
-			#requete=requete.decode()
-			print("Player ",num," :",requete)
-			offers[num] = requete
+		if not requete == '' and not requete == "askOffer" and not requete == "badInput":
+			if isOfferValid(requete,num):
+			    print("Player ",num," :",requete)
+			    offers[num] = str(requete)
+			    ack = "ack:Offre valide"
+			    message = str(ack).encode()
+			    mqs[num].send(message)
+			else:
+			    errorMessage = "error:Offre non valide"
+			    message = str(errorMessage).encode()
+			    mqs[num].send(message)
 			requete=''
 		if requete == "askOffer":
 			print(offers)
@@ -87,6 +124,11 @@ def player(num):
 			message = str(offers).encode()
 			mqs[num].send(message)
 			requete=""
+		if requete == "badInput":
+			errorMessage = "error:bad input"
+			message = str(errorMessage).encode()
+			mqs[num].send(message)
+			
 
         
         

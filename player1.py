@@ -16,10 +16,8 @@ class Player(object): #juste une classe pour
         self.name = name
         self.number = number
         self.hand = hand
-
-
-
-
+    
+    
 if __name__=="__main__":
     print("bienvenue dans le jeu")
     name=input("Entrez votre nom: ")
@@ -35,11 +33,13 @@ if __name__=="__main__":
         request = input("Que voulez vous faire ? ")
         if request == "faire_offre":
             offre = input("Quelle est votre offre ? ")
+            
             print("Votre offre est: ", offre)
             #envoie de l'offre par mq
             message = str(offre).encode()
             mq.send(message)
-        if request == "afficher_offres":
+            
+        elif request == "afficher_offres":
             ask = "askOffer"
             message = str(ask).encode()
             mq.send(message)
@@ -49,10 +49,20 @@ if __name__=="__main__":
             m, _ = mq.receive()
             m = m.decode()
             print(m) #affichage offres
-        if request == "cloche":
+        elif request == "cloche":
             print("cloche")
             #envoie de l'action sonner cloche à game par mq
-            
+        else :
+            badInp = "badInput"
+            message = str(badInp).encode()
+            mq.send(message)
+           
+        #réception des messages d'erreurs et d'acquittement
+        received, _ = mq.receive()
+        if not received == "":
+            received = received.decode()
+            if received[:5] == "error" or received[:3] == "ack":
+                print(received)
         
         
         
