@@ -25,7 +25,7 @@ class Player(object): #juste une classe pour
         self.hand = hand
         
     def __str__(self) -> str:
-        return f"Player{self.name} whose number {self.number} whose hand {self.hand}"
+        return f"Player {self.name} whose number {self.number} whose hand {self.hand}"
     
 def rand_hand(): #return un deck aleatoire de 5 cartes 
     hand = []
@@ -54,12 +54,11 @@ def initialize_game():
         message, t=mqs[i].receive()
         while not message == '':
             name=message.decode()
-            print(name)
             message=''
             joueurs.append(Player(name,i,rand_hand()))
+            print(name," has joined the game as player",i)
             i+=1
-            print("hello")
-    print('on a fini le while')
+    print("All the player is here.")
     for i in range(num_players):
         print(joueurs[i])
     
@@ -75,7 +74,7 @@ def player(num):
         requete, t=mqs[num].receive()
         while not requete == '':
             requete=requete.decode()
-            print(requete,num)
+            print("Player ",num," :",requete)
             requete=''
         
         
@@ -84,9 +83,9 @@ def clean():
 		for i in range(num_players):
 			q = sysv_ipc.MessageQueue(666+i)
 			q.remove()
-		print("on a vidé les queues") 
+		print("clean all the queues successfully") 
 	except:
-		print("AHA")  
+		print("Memory is already clean.")  
       
 		
                 
