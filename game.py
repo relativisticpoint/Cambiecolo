@@ -46,7 +46,7 @@ def initialize_mq(num_players):
         mq = sysv_ipc.MessageQueue(keys[i], sysv_ipc.IPC_CREAT) 
         mqs.append(mq)
 
-def initialize_game():
+def initialize_game(joueurs):
     initialize_key(num_players)
     print(keys)
     initialize_mq(num_players)
@@ -60,12 +60,12 @@ def initialize_game():
             joueurs.append(Player(name,i,rand_hand()))
             print(name," has joined the game as player",i)
             i+=1
-    print("All the player is here.")
+    print("All the players are here")
     for i in range(num_players):
         print(joueurs[i])
     
 
-def haveCard(offre, num):
+def haveCard(offre, num,joueurs):
     isValid = False
     cardName = offre[1:]
     for card in joueurs[num].hand:
@@ -73,9 +73,9 @@ def haveCard(offre, num):
             isValid = True
     return isValid
 
-def haveGoodNumber(offre, num):
+def haveGoodNumber(offre, num,joueurs):
     isValid = False
-    cardNumber = int(offre[:1])
+    cardNumber = int(offre[0])
     cardName = offre[1:]
     counter = 0
     for card in joueurs[num].hand:
@@ -86,28 +86,29 @@ def haveGoodNumber(offre, num):
         isValid = True
     return isValid
         
-def isOfferValid(offre, num):
+def isOfferValid(offre, num,joueurs):
     isValid = False
     print("offre:",offre," du joueur: ",num)
-    if haveCard(offre, num):
+    if haveCard(offre, num,joueurs):
         print("haveCard")
-    if haveGoodNumber(offre, num):
+    if haveGoodNumber(offre, num,joueurs):
         print("haveGoodNumber")
-        isValid = True
+    isValid = True
     		
     return isValid
 
-def player(num):
+def player(num,joueurs):
     #initialize_game()
     global offers
     initialize_key(num_players)
     initialize_mq(num_players)
+    # print("la liste des joueurs mais dans la methode player",joueurs)
     while not Bell :
         requete = ''
         requete, t=mqs[num].receive()
         requete=requete.decode()
         if not requete == '' and not requete == "askOffer" and not requete == "badInput":
-            if isOfferValid(requete,num):
+            if isOfferValid(requete,num,joueurs):
                 print("Player ",num," :",requete)
                 offers[num] = str(requete)
                 ack = "ack:Offre valide"
@@ -145,11 +146,11 @@ def clean():
                 
 if __name__=="__main__":
     clean()
-    initialize_game()
+    initialize_game(joueurs)
     for i in range(num_players):
         random_hand = rand_hand()
 
-        player_process = Process(target=player,args=(i,))
+        player_process = Process(target=player,args=(i,joueurs,))
         list_player_processes.append(player_process)
     print(list_player_processes)
     for player_process in list_player_processes:
