@@ -9,7 +9,7 @@ import socket
 import random
 
 #*************************************************Joueurn************************************************
-key = 667 #pour utiliser la message queue
+key = 666 #pour utiliser la message queue
 
 class Player(object): #juste une classe pour 
     def __init__(self, name, number,hand):
@@ -52,6 +52,14 @@ if __name__=="__main__":
         elif request == "cloche":
             print("cloche")
             #envoie de l'action sonner cloche à game par mq
+            
+        elif request == "echange":
+            numeroEchange = input("Quel est le numéro du joueur avec qui vous voulez echanger ? ")
+            carteEchange = input("Quelle carte voulez-vous echanger ? ") #2plane
+            balise = "echange"
+            message = str(balise+numeroEchange+carteEchange).encode()
+            mq.send(message)
+            
         else :
             badInp = "badInput"
             message = str(badInp).encode()
