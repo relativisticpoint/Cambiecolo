@@ -93,7 +93,7 @@ def isOfferValid(offre, num,joueurs):
         print("haveCard")
     if haveGoodNumber(offre, num,joueurs):
         print("haveGoodNumber")
-    isValid = True
+        isValid = True
     		
     return isValid
 
@@ -129,6 +129,7 @@ def player(num,joueurs):
             errorMessage = "error:bad input"
             message = str(errorMessage).encode()
             mqs[num].send(message)
+
 			
 
         

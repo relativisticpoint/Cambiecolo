@@ -46,9 +46,9 @@ if __name__=="__main__":
             
             print("Voici les offres ")
             #réception du tableau des offres par mq
-            m, _ = mq.receive()
-            m = m.decode()
-            print(m) #affichage offres
+            #m, _ = mq.receive()
+            #m = m.decode()
+            #print(m) #affichage offres
         elif request == "cloche":
             print("cloche")
             #envoie de l'action sonner cloche à game par mq
@@ -61,8 +61,9 @@ if __name__=="__main__":
         received, _ = mq.receive()
         if not received == "":
             received = received.decode()
-            if received[:5] == "error" or received[:3] == "ack":
-                print(received)
+            print(received)
+            #if received[:5] == "error" or received[:3] == "ack":
+            #   print(received)
         
         
         
