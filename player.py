@@ -52,6 +52,13 @@ if __name__=="__main__":
         elif request == "cloche":
             print("cloche")
             #envoie de l'action sonner cloche à game par mq
+            
+        #elif request == "echange":
+            #echange = input("Quelle est le numéro du joueur avec qui vous voulez echanger ? ")
+            #balise = "exchange:"
+            #message = str(balise+echange).encode()
+            #mq.send(message)
+            
         else :
             badInp = "badInput"
             message = str(badInp).encode()

@@ -75,7 +75,8 @@ def haveCard(offre, num,joueurs):
 
 def haveGoodNumber(offre, num,joueurs):
     isValid = False
-    cardNumber = int(offre[0])
+    print("offre:",offre)
+    cardNumber = int(float(offre[0]))
     cardName = offre[1:]
     counter = 0
     for card in joueurs[num].hand:
@@ -106,8 +107,9 @@ def player(num,joueurs):
     while not Bell :
         requete = ''
         requete, t=mqs[num].receive()
+        print(requete)
         requete=requete.decode()
-        if not requete == '' and not requete == "askOffer" and not requete == "badInput":
+        if not requete == '' and not requete == "askOffer" and not requete == "badInput" and not requete[0]=="S" and not requete[0]=="e" and not requete[0]=="a":
             if isOfferValid(requete,num,joueurs):
                 print("Player ",num," :",requete)
                 offers[num] = str(requete)
@@ -118,7 +120,7 @@ def player(num,joueurs):
                 errorMessage = "error:Offre non valide"
                 message = str(errorMessage).encode()
                 mqs[num].send(message)
-                requete=''
+            requete=''
         if requete == "askOffer":
             print(offers)
             print(requete)
