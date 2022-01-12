@@ -9,7 +9,7 @@ import socket
 import random
 
 #*************************************************Joueurn************************************************
-key = 666 #pour utiliser la message queue
+key = 667 #pour utiliser la message queue
 
 class Player(object): #juste une classe pour 
     def __init__(self, name, number,hand):
