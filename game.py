@@ -95,8 +95,37 @@ def isOfferValid(offre, num,joueurs):
     if haveGoodNumber(offre, num,joueurs):
         print("haveGoodNumber")
         isValid = True
-    		
     return isValid
+    
+    
+def isExchangeValid(numeroEchange, carteEchange):
+    isValid = False
+    print("l'offre que jai accepte: ",offers[int(numeroEchange)])
+    print("le nombre de carte que le joueur offre: ",int(offers[int(numeroEchange)][0]))
+    #have same number of card
+    if int(carteEchange[0]) == int(offers[int(numeroEchange)][0]):
+        isValid = True
+        print("Bon nombre de cartes")
+    return isValid
+            
+def do_exchange(numPlayer1, offer1, numPlayer2, offer2):
+    #joueurs[numPlayer1].hand
+    #joueurs[numPlayer2].hand
+    for cardIndex1 in range(len(joueurs[numPlayer1].hand)):
+        if joueurs[numPlayer1].hand[cardIndex1] == offer1[1:]:
+            cardIndex2 = 0
+            while not joueurs[int(numPlayer2)].hand[int(cardIndex2)] == offer2[1:]:
+                cardIndex2 += 1
+            tmp = joueurs[int(numPlayer1)].hand[int(cardIndex1)]
+            joueurs[int(numPlayer1)].hand[int(cardIndex1)] = joueurs[int(numPlayer2)].hand[int(cardIndex2)]
+            joueurs[int(numPlayer2)].hand[int(cardIndex2)] = tmp
+                #for cardIndex2 in range(joueurs[numPlayer2].hand):
+                    #if joueurs[numPlayer2].hand[cardIndex2] == offer2[1:]:
+                    
+    
+
+    
+    
 
 def player(num,joueurs):
     #initialize_game()
@@ -109,7 +138,7 @@ def player(num,joueurs):
         requete, t=mqs[num].receive()
         print(requete)
         requete=requete.decode()
-        if not requete == '' and not requete == "askOffer" and not requete == "badInput" and not requete[0]=="S" and not requete[0]=="e" and not requete[0]=="a":
+        if not requete == '' and not requete == "askOffer" and not requete == "badInput" and not requete[0]=="S" and not requete[0]=="e" and not requete[0]=="a" and not requete[:7] == "echange":
             if isOfferValid(requete,num,joueurs):
                 print("Player ",num," :",requete)
                 offers[num] = str(requete)
@@ -131,6 +160,24 @@ def player(num,joueurs):
             errorMessage = "error:bad input"
             message = str(errorMessage).encode()
             mqs[num].send(message)
+        if requete[:7] == "echange":
+            numeroEchange = requete[7:8]
+            carteEchange = requete[8:]
+            
+            print("log: numEchange ",numeroEchange," et carte: ",carteEchange)
+            if isOfferValid(carteEchange,num,joueurs) and isExchangeValid(numeroEchange, carteEchange):
+                print("log: Echange Valide")
+                do_exchange(num, carteEchange, numeroEchange, offers[int(numeroEchange)])
+                print("Exchange done")
+                for i in range(num_players):
+                    print(joueurs[i])
+            else:
+                errorMessage = "error:Offre non valide"
+                message = str(errorMessage).encode()
+                mqs[num].send(message)
+            requete=''
+            
+            
 
 			
 

@@ -53,11 +53,12 @@ if __name__=="__main__":
             print("cloche")
             #envoie de l'action sonner cloche à game par mq
             
-        #elif request == "echange":
-            #echange = input("Quelle est le numéro du joueur avec qui vous voulez echanger ? ")
-            #balise = "exchange:"
-            #message = str(balise+echange).encode()
-            #mq.send(message)
+        elif request == "echange":
+            numeroEchange = input("Quel est le numéro du joueur avec qui vous voulez echanger ? ")
+            carteEchange = input("Quelle carte voulez-vous echanger ? ") #2plane
+            balise = "echange"
+            message = str(balise+numeroEchange+carteEchange).encode()
+            mq.send(message)
             
         else :
             badInp = "badInput"
