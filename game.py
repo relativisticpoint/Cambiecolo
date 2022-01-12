@@ -93,7 +93,7 @@ def isOfferValid(offre, num):
         print("haveCard")
     if haveGoodNumber(offre, num):
         print("haveGoodNumber")
-    isValid = True
+        isValid = True
     		
     return isValid
 
@@ -113,11 +113,11 @@ def player(num):
                 ack = "ack:Offre valide"
                 message = str(ack).encode()
                 mqs[num].send(message)
-        else:
-            errorMessage = "error:Offre non valide"
-            message = str(errorMessage).encode()
-            mqs[num].send(message)
-            requete=''
+            else:
+                errorMessage = "error:Offre non valide"
+                message = str(errorMessage).encode()
+                mqs[num].send(message)
+                requete=''
         if requete == "askOffer":
             print(offers)
             print(requete)
