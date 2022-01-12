@@ -132,12 +132,16 @@ def player(num,joueurs):
     global offers
     initialize_key(num_players)
     initialize_mq(num_players)
+    
+    
+    
     # print("la liste des joueurs mais dans la methode player",joueurs)
     while not Bell :
         requete = ''
         requete, t=mqs[num].receive()
         print(requete)
         requete=requete.decode()
+        
         if not requete == '' and not requete == "askOffer" and not requete == "badInput" and not requete[0]=="S" and not requete[0]=="e" and not requete[0]=="a" and not requete[:7] == "echange":
             if isOfferValid(requete,num,joueurs):
                 print("Player ",num," :",requete)
@@ -169,6 +173,11 @@ def player(num,joueurs):
                 print("log: Echange Valide")
                 do_exchange(num, carteEchange, numeroEchange, offers[int(numeroEchange)])
                 print("Exchange done")
+                
+                ack = "ack:Echange reussi"
+                message = str(ack).encode()
+                mqs[num].send(message)
+                
                 for i in range(num_players):
                     print(joueurs[i])
             else:
