@@ -2,9 +2,9 @@
 -affichage de la main après les échanges
 -faire une requete dans player pour afficher notre main 
 -mutex lors que l'acceptation d'un échange
--lors de afficher_offres -> masquer le nom de la carte
+X-lors de afficher_offres -> masquer le nom de la carte
 -une fonction qui compte le nombre de carte countCard(nomCarte)
 -une fonction isFullHand(numPlayer) qui regarde si un joueur à une main complète
--enlever une offre apres un echange---FAIT
+X-enlever une offre apres un echange---FAIT
 -rajouter une methode qui retourne un long string pour afficher la main du joueur
 
