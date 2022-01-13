@@ -142,7 +142,8 @@ def player(num,joueurs):
         print(requete)
         requete=requete.decode()
         
-        if not requete == '' and not requete == "askOffer" and not requete == "badInput" and not requete[0]=="S" and not requete[0]=="e" and not requete[0]=="a" and not requete[:7] == "echange":
+        if requete[:5] == "offre":
+            requete = requete[5:]
             if isOfferValid(requete,num,joueurs):
                 print("Player ",num," :",requete)
                 offers[num] = str(requete)

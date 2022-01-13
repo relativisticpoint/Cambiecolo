@@ -33,10 +33,10 @@ if __name__=="__main__":
         request = input("Que voulez vous faire ? ")
         if request == "faire_offre":
             offre = input("Quelle est votre offre ? ")
-            
+            entete = "offre"
             print("Votre offre est: ", offre)
             #envoie de l'offre par mq
-            message = str(offre).encode()
+            message = str(entete+offre).encode()
             mq.send(message)
             
         elif request == "afficher_offres":
@@ -56,8 +56,8 @@ if __name__=="__main__":
         elif request == "echange":
             numeroEchange = input("Quel est le numéro du joueur avec qui vous voulez echanger ? ")
             carteEchange = input("Quelle carte voulez-vous echanger ? ") #2plane
-            balise = "echange"
-            message = str(balise+numeroEchange+carteEchange).encode()
+            entete = "echange"
+            message = str(entete+numeroEchange+carteEchange).encode()
             mq.send(message)
             
         else :
