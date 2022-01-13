@@ -124,7 +124,15 @@ def do_exchange(numPlayer1, offer1, numPlayer2, offer2):
     offers[int(numPlayer2)] = ""*32
                     
     
-
+def maskedOffer(offers):
+    tabMaskedOffer = []
+    for i in range(len(offers)):
+        tmp = str(offers[i])
+        if tmp == "":
+            tabMaskedOffer.append("")
+        else:
+            tabMaskedOffer.append(tmp[0])
+    return tabMaskedOffer
     
     
 
@@ -159,7 +167,7 @@ def player(num,joueurs):
         if requete == "askOffer":
             print(offers)
             print(requete)
-            message = str(offers).encode()
+            message = str(maskedOffer(offers)).encode()
             mqs[num].send(message)
             requete=""
         if requete == "badInput":
