@@ -10,7 +10,7 @@ import random
 
 
 #*************************************************GAME************************************************
-num_players = 2 #num des joueurs
+num_players = 3 #num des joueurs
 cartes = {0:'plane',1:'car',2:'train',3:'bike',4:'shoes'} #dictionnaire des cartes disponibles (associe a chaque carte un numero)
 joueurs = []
 mqs = []
