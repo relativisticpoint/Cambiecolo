@@ -135,6 +135,31 @@ def maskedOffer(offers):
     return tabMaskedOffer
     
     
+    
+    
+def countCardInHand(numPlayer):
+    maxIdenticalCards = 0
+    for i in range(len(cartes)):
+        counter = 0
+        for j in range(len(joueurs[int(numPlayer)].hand)):
+            if cartes[i] == joueurs[int(numPlayer)].hand[j]:
+                counter +=1
+        if maxIdenticalCards < counter :
+            maxIdenticalCards = counter
+    return maxIdenticalCards
+    
+def isFullHand(numPlayer):
+    isValid = False
+    if countCardInHand(numPlayer) == 5:
+        isValid = True
+    return isValid
+        
+            
+        
+    
+    
+    
+    
 
 def player(num,joueurs):
     #initialize_game()
@@ -195,6 +220,20 @@ def player(num,joueurs):
                 message = str(errorMessage).encode()
                 mqs[num].send(message)
             requete=''
+        if requete == "cloche":
+            if isFullHand(num):
+                ack = "ack:Vous gagnez"
+                
+                message = str(ack).encode()
+                mqs[num].send(message)
+            else:
+                errorMessage = "error:you don't have five identical cards: "
+                numberOfIdenticalCard = str(countCardInHand(num))
+                message = str(errorMessage+numberOfIdenticalCard).encode()
+                mqs[num].send(message)
+            requete = ""
+                
+                
             
             
 

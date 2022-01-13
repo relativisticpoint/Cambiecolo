@@ -50,8 +50,10 @@ if __name__=="__main__":
             #m = m.decode()
             #print(m) #affichage offres
         elif request == "cloche":
-            print("cloche")
             #envoie de l'action sonner cloche à game par mq
+            cloche = "cloche"
+            message = str(cloche).encode()
+            mq.send(message)
             
         elif request == "echange":
             numeroEchange = input("Quel est le numéro du joueur avec qui vous voulez echanger ? ")
