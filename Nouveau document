@@ -3,8 +3,9 @@
 -faire une requete dans player pour afficher notre main 
 -mutex lors que l'acceptation d'un échange
 X-lors de afficher_offres -> masquer le nom de la carte
--une fonction qui compte le nombre de carte countCard(nomCarte)
--une fonction isFullHand(numPlayer) qui regarde si un joueur à une main complète
+X-une fonction qui compte le nombre de carte countCard(nomCarte)
+X-une fonction isFullHand(numPlayer) qui regarde si un joueur à une main complète
 X-enlever une offre apres un echange---FAIT
+X-gestion cloche
 -rajouter une methode qui retourne un long string pour afficher la main du joueur
 
