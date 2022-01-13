@@ -6,3 +6,5 @@
 -une fonction qui compte le nombre de carte countCard(nomCarte)
 -une fonction isFullHand(numPlayer) qui regarde si un joueur à une main complète
 -enlever une offre apres un echange---FAIT
+-rajouter une methode qui retourne un long string pour afficher la main du joueur
+
