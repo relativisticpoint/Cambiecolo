@@ -5,4 +5,4 @@
 -lors de afficher_offres -> masquer le nom de la carte
 -une fonction qui compte le nombre de carte countCard(nomCarte)
 -une fonction isFullHand(numPlayer) qui regarde si un joueur à une main complète
--enlever une offre apres un echange
+-enlever une offre apres un echange---FAIT

@@ -10,7 +10,7 @@ import random
 
 
 #*************************************************GAME************************************************
-num_players = 3 #num des joueurs
+num_players = 2 #num des joueurs
 cartes = {0:'plane',1:'car',2:'train',3:'bike',4:'shoes'} #dictionnaire des cartes disponibles (associe a chaque carte un numero)
 joueurs = []
 mqs = []
@@ -121,6 +121,7 @@ def do_exchange(numPlayer1, offer1, numPlayer2, offer2):
             joueurs[int(numPlayer2)].hand[int(cardIndex2)] = tmp
                 #for cardIndex2 in range(joueurs[numPlayer2].hand):
                     #if joueurs[numPlayer2].hand[cardIndex2] == offer2[1:]:
+    offers[int(numPlayer2)] = ""*32
                     
     
 
