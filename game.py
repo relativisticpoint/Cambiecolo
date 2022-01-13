@@ -75,37 +75,37 @@ def haveCard(offre, num,joueurs):
 
 def haveGoodNumber(offre, num,joueurs):
     isValid = False
-    print("offre:",offre)
+    #print("offre:",offre)
     cardNumber = int(float(offre[0]))
     cardName = offre[1:]
     counter = 0
     for card in joueurs[num].hand:
         if cardName == card:
             counter += 1
-    print("counter: ",counter,"et cardNumber: ",cardNumber)
+    #print("counter: ",counter,"et cardNumber: ",cardNumber)
     if cardNumber <= counter:
         isValid = True
     return isValid
         
 def isOfferValid(offre, num,joueurs):
     isValid = False
-    print("offre:",offre," du joueur: ",num)
+    #print("offre:",offre," du joueur: ",num)
     if haveCard(offre, num,joueurs):
-        print("haveCard")
-    if haveGoodNumber(offre, num,joueurs):
-        print("haveGoodNumber")
-        isValid = True
+    #print("haveCard")
+        if haveGoodNumber(offre, num,joueurs):
+        #print("haveGoodNumber")
+            isValid = True
     return isValid
     
     
 def isExchangeValid(numeroEchange, carteEchange):
     isValid = False
-    print("l'offre que jai accepte: ",offers[int(numeroEchange)])
-    print("le nombre de carte que le joueur offre: ",int(offers[int(numeroEchange)][0]))
+    #print("l'offre que jai accepte: ",offers[int(numeroEchange)])
+    #print("le nombre de carte que le joueur offre: ",int(offers[int(numeroEchange)][0]))
     #have same number of card
     if int(carteEchange[0]) == int(offers[int(numeroEchange)][0]):
         isValid = True
-        print("Bon nombre de cartes")
+        #print("Bon nombre de cartes")
     return isValid
             
 def do_exchange(numPlayer1, offer1, numPlayer2, offer2):
@@ -171,7 +171,7 @@ def player(num,joueurs):
             
             print("log: numEchange ",numeroEchange," et carte: ",carteEchange)
             if isOfferValid(carteEchange,num,joueurs) and isExchangeValid(numeroEchange, carteEchange):
-                print("log: Echange Valide")
+                print("log: Exchange is valid")
                 do_exchange(num, carteEchange, numeroEchange, offers[int(numeroEchange)])
                 print("Exchange done")
                 
