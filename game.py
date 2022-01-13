@@ -57,7 +57,9 @@ def initialize_game(joueurs):
         while not message == '':
             name=message.decode()
             message=''
-            joueurs.append(Player(name,i,rand_hand()))
+            #joueurs.append(Player(name,i,rand_hand()))
+            cheatHand = ['car','car','car','car','car']
+            joueurs.append(Player(name,i,cheatHand))
             print(name," has joined the game as player",i)
             i+=1
     print("All the players are here")
@@ -222,10 +224,14 @@ def player(num,joueurs):
             requete=''
         if requete == "cloche":
             if isFullHand(num):
-                ack = "ack:Vous gagnez"
-                
-                message = str(ack).encode()
+                ack = "ack:Le gagnant est "
+                winnerName = str(joueurs[num].name)
+                message = str(ack+winnerName).encode()
                 mqs[num].send(message)
+                '''
+                for i in range(num_players): #erreur
+                    mqs[i].send(message) #erreur
+                '''
             else:
                 errorMessage = "error:you don't have five identical cards: "
                 numberOfIdenticalCard = str(countCardInHand(num))
