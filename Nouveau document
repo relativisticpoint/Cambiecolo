@@ -8,4 +8,5 @@ X-une fonction isFullHand(numPlayer) qui regarde si un joueur à une main compl�
 X-enlever une offre apres un echange---FAIT
 X-gestion cloche
 -rajouter une methode qui retourne un long string pour afficher la main du joueur
-
+DISTRIBUTION DES CARTES
+COMPORTEMENTS après cloche
