@@ -17,6 +17,9 @@ mqs = []
 list_player_processes = []
 offers = shared_memory.ShareableList([""*32,""*32,""*32,""*32,""*32])
 Bell = False #
+handP1 = shared_memory.ShareableList(["car","bike","bike","car","bike"])
+handP2 = shared_memory.ShareableList(["car","car","bike","car","bike"])
+all_hand= [handP1,handP2]
 
 keys = [] #pour pouvoir utiliser la message queue une key par joueur 
 lock = threading.Lock()
@@ -59,7 +62,7 @@ def initialize_game(joueurs):
             message=''
             #joueurs.append(Player(name,i,rand_hand()))
             cheatHand = ['car','car','car','car','car']
-            joueurs.append(Player(name,i,cheatHand))
+            joueurs.append(Player(name,i,all_hand[i]))
             print(name," has joined the game as player",i)
             i+=1
     print("All the players are here")
