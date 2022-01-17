@@ -7,6 +7,7 @@ from multiprocessing import Process, Queue
 import threading
 import socket
 import random
+import signal
 
 #*************************************************Joueurn************************************************
 key = 667 #pour utiliser la message queue
@@ -16,18 +17,18 @@ class Player(object): #juste une classe pour
         self.name = name
         self.number = number
         self.hand = hand
-    
-    
+        
 if __name__=="__main__":
     print("bienvenue dans le jeu")
     name=input("Entrez votre nom: ")
+    pid = str(os.getpid())
     try:
         mq = sysv_ipc.MessageQueue(key)
     except ExistentialError:
         print("Cannot connect to message queue", key, ", terminating.")
         sys.exit(1)
-    #send le nom 
-    message = str(name).encode()
+    #send le nom
+    message = str(pid+name).encode()
     mq.send(message)
     while True:
         request = input("Que voulez vous faire ? ")
@@ -61,6 +62,14 @@ if __name__=="__main__":
             entete = "echange"
             message = str(entete+numeroEchange+carteEchange).encode()
             mq.send(message)
+        
+        elif request == "afficher_main":
+            ask = "askHand"
+            message = str(ask).encode()
+            mq.send(message)
+        elif request == "END":
+            os.kill(os.getpid(), signal.SIGKILL)
+            
             
         else :
             badInp = "badInput"

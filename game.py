@@ -7,6 +7,7 @@ from multiprocessing import Process, Queue, shared_memory
 import threading
 import socket
 import random
+import signal
 
 
 #*************************************************GAME************************************************
@@ -23,9 +24,14 @@ handP3 = shared_memory.ShareableList(["","","","",""])
 handP4 = shared_memory.ShareableList(["","","","",""])
 handP5 = shared_memory.ShareableList(["","","","",""])
 all_hands= [handP1,handP2,handP3,handP4,handP5]
+list_pid = []
+
+lock = shared_memory.ShareableList(["lose"])
+winner = shared_memory.ShareableList([""])
 
 keys = [] #pour pouvoir utiliser la message queue une key par joueur 
-lock = threading.Lock()
+#lock = threading.Lock()
+
 class Player(object): #juste une classe pour 
     def __init__(self, name, number,hand):
         self.name = name
@@ -35,13 +41,6 @@ class Player(object): #juste une classe pour
     def __str__(self) -> str:
         return f"Player {self.name} whose number {self.number} whose hand {self.hand}"
     
-def rand_hand(): #return un deck aleatoire de 5 cartes 
-    hand = []
-    for i in range(5):
-        aleatoire=random.randint(0,4)
-        hand.append(cartes[aleatoire])
-    # print (hand)
-    return hand
 def create_hands(num_players):
     list_rand = []
     check=0
@@ -62,9 +61,7 @@ def create_hands(num_players):
         for j in range(5):
             all_hands[i][j] = list_rand[k] #remplir la hand de chaque joueur par des cartes identiques 
             k+=1
-
-
-
+  
 def initialize_key(num_players):
   for i in range(num_players):
     new_key=666+i
@@ -84,7 +81,11 @@ def initialize_game(joueurs):
         message = ''
         message, t=mqs[i].receive()
         while not message == '':
-            name=message.decode()
+            receive=message.decode()
+            name = receive[4:]
+            pid = receive[:4]
+            pid = int(pid)
+            list_pid.append(pid)
             message=''
             #joueurs.append(Player(name,i,rand_hand()))
             cheatHand = ['car','car','car','car','car']
@@ -201,7 +202,7 @@ def player(num,joueurs):
     
     
     # print("la liste des joueurs mais dans la methode player",joueurs)
-    while not Bell :
+    while lock[0] == "lose" :
         requete = ''
         requete, t=mqs[num].receive()
         print(requete)
@@ -226,6 +227,10 @@ def player(num,joueurs):
             message = str(maskedOffer(offers)).encode()
             mqs[num].send(message)
             requete=""
+        if requete == "askHand":
+            message = str(all_hands[num]).encode()
+            mqs[num].send(message)
+            requete=""
         if requete == "badInput":
             errorMessage = "error:bad input"
             message = str(errorMessage).encode()
@@ -233,7 +238,6 @@ def player(num,joueurs):
         if requete[:7] == "echange":
             numeroEchange = requete[7:8]
             carteEchange = requete[8:]
-            
             print("log: numEchange ",numeroEchange," et carte: ",carteEchange)
             if isOfferValid(carteEchange,num,joueurs) and isExchangeValid(numeroEchange, carteEchange):
                 print("log: Exchange is valid")
@@ -252,21 +256,33 @@ def player(num,joueurs):
                 mqs[num].send(message)
             requete=''
         if requete == "cloche":
-            if isFullHand(num):
+            if lock[0][:3] == "win":
+                message = str("END").encode()
+                mqs[num].send(message)
+                message = str("END").encode()
+                mqs[num].send(message)
+            if isFullHand(num) and lock[0] == "lose":
                 ack = "ack:Le gagnant est "
+                #print("valeur du lock: ",lock[0])
+                lock[0] = "win"+str(num)
+                #print("valeur du lock après : ",lock[0])
                 winnerName = str(joueurs[num].name)
+                winner[0] = winnerName
                 message = str(ack+winnerName).encode()
                 mqs[num].send(message)
+                
                 '''
                 for i in range(num_players): #erreur
                     mqs[i].send(message) #erreur
                 '''
             else:
-                errorMessage = "error:you don't have five identical cards: "
+                errorMessage = "error:you don't have five identical cards or a player has already won: "
                 numberOfIdenticalCard = str(countCardInHand(num))
                 message = str(errorMessage+numberOfIdenticalCard).encode()
                 mqs[num].send(message)
             requete = ""
+			
+            
                 
                 
             
@@ -291,13 +307,16 @@ if __name__=="__main__":
     clean()
     initialize_game(joueurs)
     for i in range(num_players):
-        random_hand = rand_hand()
 
         player_process = Process(target=player,args=(i,joueurs,))
         list_player_processes.append(player_process)
     print(list_player_processes)
     for player_process in list_player_processes:
         player_process.start()
-    # for player_process in list_player_processes:
-    #     player_process.join()
+    for player_process in list_player_processes:
+        player_process.join()
+        
+    for pid in list_pid:
+        os.kill(pid, signal.SIGKILL)
+    print("Game is over! The winner is", winner[0])
 
