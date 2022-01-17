@@ -10,16 +10,19 @@ import random
 
 
 #*************************************************GAME************************************************
-num_players = 2 #num des joueurs
+num_players = 3 #num des joueurs
 cartes = {0:'plane',1:'car',2:'train',3:'bike',4:'shoes'} #dictionnaire des cartes disponibles (associe a chaque carte un numero)
 joueurs = []
 mqs = []
 list_player_processes = []
 offers = shared_memory.ShareableList([""*32,""*32,""*32,""*32,""*32])
 Bell = False #
-handP1 = shared_memory.ShareableList(["car","bike","bike","car","bike"])
-handP2 = shared_memory.ShareableList(["car","car","bike","car","bike"])
-all_hand= [handP1,handP2]
+handP1 = shared_memory.ShareableList(["","","","",""])
+handP2 = shared_memory.ShareableList(["","","","",""])
+handP3 = shared_memory.ShareableList(["","","","",""])
+handP4 = shared_memory.ShareableList(["","","","",""])
+handP5 = shared_memory.ShareableList(["","","","",""])
+all_hands= [handP1,handP2,handP3,handP4,handP5]
 
 keys = [] #pour pouvoir utiliser la message queue une key par joueur 
 lock = threading.Lock()
@@ -39,7 +42,29 @@ def rand_hand(): #return un deck aleatoire de 5 cartes
         hand.append(cartes[aleatoire])
     # print (hand)
     return hand
-  
+def create_hands(num_players):
+    list_rand = []
+    check=0
+    aleatoire = 0
+    for i in range(num_players):
+        check = aleatoire
+        #on tire aleatoirement un nombre entre 0 et 4 et on veut eviter de tirer deux fois de suite le meme
+        while check==aleatoire:
+            aleatoire=random.randint(0,4)
+        for j in range(5):
+            list_rand.append(cartes[aleatoire])
+    for i in range(num_players):
+
+        random.shuffle(list_rand)
+
+    k=0
+    for i in range(num_players):
+        for j in range(5):
+            all_hands[i][j] = list_rand[k] #remplir la hand de chaque joueur par des cartes identiques 
+            k+=1
+
+
+
 def initialize_key(num_players):
   for i in range(num_players):
     new_key=666+i
@@ -53,6 +78,7 @@ def initialize_game(joueurs):
     initialize_key(num_players)
     print(keys)
     initialize_mq(num_players)
+    create_hands(num_players)
     i=0
     while not (len(joueurs)==num_players):
         message = ''
@@ -62,7 +88,7 @@ def initialize_game(joueurs):
             message=''
             #joueurs.append(Player(name,i,rand_hand()))
             cheatHand = ['car','car','car','car','car']
-            joueurs.append(Player(name,i,all_hand[i]))
+            joueurs.append(Player(name,i,all_hands[i]))
             print(name," has joined the game as player",i)
             i+=1
     print("All the players are here")
