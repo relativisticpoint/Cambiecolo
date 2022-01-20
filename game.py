@@ -42,7 +42,7 @@ class Player(object): #juste une classe Player pour rassembler les informations 
         return f"Player {self.name} has number {self.number} has hand {self.hand}"
     
 
-#
+#Methode qui permet la distribution des cartes en respectant les règles du jeu
 def create_hands(num_players):
     list_rand = [] #liste qui contiendra les 
     check=0
@@ -113,7 +113,7 @@ def haveCard(offre, num,joueurs):
     return isValid
 
 
-#
+#méthode qui vérifie que les joueurs qui échangent ont bien le même nombre de cartes à échanger
 def haveGoodNumber(offre, num,joueurs):
     isValid = False
     cardNumber = int(float(offre[0]))
@@ -139,11 +139,9 @@ def isOfferValid(offre, num,joueurs):
     return isValid
     
     
-#
+#méthode qui vérifie si l'échange est valide (bon nombre de cartes)
 def isExchangeValid(numeroEchange, carteEchange):
-    isValid = False #!!!!!!! on peut supprimer ces commentaires
-    #print("l'offre que jai accepte: ",offers[int(numeroEchange)])
-    #print("le nombre de carte que le joueur offre: ",int(offers[int(numeroEchange)][0]))
+    isValid = False
     #have same number of card
     if int(carteEchange[0]) == int(offers[int(numeroEchange)][0]):
         isValid = True
@@ -153,8 +151,7 @@ def isExchangeValid(numeroEchange, carteEchange):
 
 #Methode qui permet d'assurer l'echange entre deux joueurs
 def do_exchange(numPlayer1, offer1, numPlayer2, offer2):
-    #joueurs[numPlayer1].hand
-    #joueurs[numPlayer2].hand
+
     for cardIndex1 in range(len(joueurs[numPlayer1].hand)):
         if joueurs[numPlayer1].hand[cardIndex1] == offer1[1:]:
             cardIndex2 = 0
@@ -163,12 +160,11 @@ def do_exchange(numPlayer1, offer1, numPlayer2, offer2):
             tmp = joueurs[int(numPlayer1)].hand[int(cardIndex1)]
             joueurs[int(numPlayer1)].hand[int(cardIndex1)] = joueurs[int(numPlayer2)].hand[int(cardIndex2)]
             joueurs[int(numPlayer2)].hand[int(cardIndex2)] = tmp
-                #!for cardIndex2 in range(joueurs[numPlayer2].hand):
-                    #!if joueurs[numPlayer2].hand[cardIndex2] == offer2[1:]:
+
     offers[int(numPlayer2)] = ""*32
                     
     
-#
+#méthode qui permet de masquer le nom des cartes lors de l'affichage des offres par les joueurs. Ainsi le joueurs ont seulement connaissance du nombre de carte à échanger.
 def maskedOffer(offers):
     tabMaskedOffer = []
     for i in range(len(offers)):
@@ -204,9 +200,8 @@ def isFullHand(numPlayer):
 #Methode centrale monstrueuse qui sera lancee dans des process séparés
 def player(num,joueurs):
     global offers
-    initialize_key(num_players)
-    initialize_mq(num_players)
-    #! il faudra enlever initialize_key et initialize_mq de player vu qu'elles sont lancées dans le main déjà
+
+
     while lock[0] == "lose" :
         requete = ''
         requete, t=mqs[num].receive()
@@ -276,11 +271,8 @@ def player(num,joueurs):
                 winner[0] = winnerName
                 message = str(ack+winnerName).encode()
                 mqs[num].send(message)
-                #!!!!!!!!! c'est un commentaire ?
-                '''
-                for i in range(num_players): #erreur
-                    mqs[i].send(message) #erreur
-                '''
+
+
             else:
                 errorMessage = "error:you don't have five identical cards or a player has already won: "
                 numberOfIdenticalCard = str(countCardInHand(num))
@@ -300,7 +292,7 @@ def clean():
 		print("Memory is already clean.")  
       
 		
-#! lignes : 279, 209,166,167,144
+
 if __name__=="__main__":
     clean()
     initialize_game(joueurs)
