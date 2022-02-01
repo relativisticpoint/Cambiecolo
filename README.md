@@ -11,6 +11,11 @@ number of cards with the first player to accept the offer. This continues until 
 bell and presents a hand of 5 identical cards, scoring the points of the transport they have grouped.
 # How to run the game ?
 to run the game you must run the game script on a terminal :
+[Pygame Module](https://www.pygame.org)
+
+    pip install pygame
+
+
 
    python3 game.py
    
