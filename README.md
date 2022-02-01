@@ -13,12 +13,12 @@ bell and presents a hand of 5 identical cards, scoring the points of the transpo
 to run the game you must run the game script on a terminal :
 
 
-    python3 game.py
+    $ python3 game.py
 
   
 for each player open a terminal and run the player script :
   
 
-    python3 playerX.py
+    $ python3 playerX.py
 
 (X refers to the id of the player for example if two players want to play one of them launches player.py on a terminal the other one runs player1.py etc..)
