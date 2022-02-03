@@ -10,13 +10,13 @@ number of cards they offer, from 1 to 3 identical cards, without showing them. T
 number of cards with the first player to accept the offer. This continues until one of the players rings the
 bell and presents a hand of 5 identical cards, scoring the points of the transport they have grouped.
 # How to run the game ?
-to run the game you must run the game script on a terminal :
+to run the game you must run the game.py script on a terminal :
 
 
     $ python3 game.py
 
   
-for each player open a terminal and run the player script :
+for each player open a terminal and run the player.py script :
   
 
     $ python3 playerX.py
